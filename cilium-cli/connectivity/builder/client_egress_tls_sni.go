@@ -19,7 +19,7 @@ func (t clientEgressTlsSni) build(ct *check.ConnectivityTest, templates map[stri
 }
 
 func clientEgressTlsSniTest(ct *check.ConnectivityTest, templates map[string]string) {
-	testName := "client-egress-tls-sni"
+	testName := "seq-client-egress-tls-sni"
 	yamlFile := templates["clientEgressTLSSNIPolicyYAML"]
 	// Test TLS SNI enforcement using an egress policy on the clients.
 	newTest(testName, ct).
@@ -52,7 +52,7 @@ func clientEgressTlsSniTest(ct *check.ConnectivityTest, templates map[string]str
 }
 
 func clientEgressL7TlsSniTest(ct *check.ConnectivityTest, templates map[string]string) {
-	testName := "client-egress-l7-tls-headers-sni"
+	testName := "seq-client-egress-l7-tls-headers-sni"
 	yamlFile := templates["clientEgressL7TLSSNIPolicyYAML"]
 	// Test TLS SNI enforcement using an egress policy on the clients.
 	newTest(testName, ct).

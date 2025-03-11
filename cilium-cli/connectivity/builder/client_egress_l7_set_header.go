@@ -22,10 +22,10 @@ func (t clientEgressL7SetHeader) build(ct *check.ConnectivityTest, templates map
 }
 
 func clientEgressL7SetHeaderTest(ct *check.ConnectivityTest, templates map[string]string, portRanges bool) {
-	testName := "client-egress-l7-set-header"
+	testName := "seq-client-egress-l7-set-header"
 	templateName := "clientEgressL7HTTPMatchheaderSecretYAML"
 	if portRanges {
-		testName = "client-egress-l7-set-header-port-range"
+		testName = "seq-client-egress-l7-set-header-port-range"
 		templateName = "clientEgressL7HTTPMatchheaderSecretPortRangeYAML"
 	}
 	// Test L7 HTTP with a header replace set in the policy
