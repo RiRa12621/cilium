@@ -5,6 +5,7 @@ package watchers
 
 import (
 	"context"
+	"log/slog"
 	"testing"
 
 	"github.com/cilium/hive/hivetest"
@@ -26,9 +27,10 @@ func (f *fakeK8sWatcherConfiguration) KVstoreEnabled() bool {
 
 func Test_No_Resources_InitK8sSubsystem(t *testing.T) {
 	fakeClientSet, _ := client.NewFakeClientset(hivetest.Logger(t))
-
+	logger := hivetest.Logger(t)
 	w := newWatcher(
-		func(cfg WatcherConfiguration) (resourceGroups []string, waitForCachesOnly []string) {
+		logger,
+		func(logger *slog.Logger, cfg WatcherConfiguration) (resourceGroups []string, waitForCachesOnly []string) {
 			return []string{}, []string{}
 		},
 		fakeClientSet,

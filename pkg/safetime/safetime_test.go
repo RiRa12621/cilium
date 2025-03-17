@@ -6,23 +6,22 @@ package safetime
 import (
 	"bytes"
 	"fmt"
+	"log/slog"
 	"testing"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/cilium/hive/hivetest"
 	"github.com/stretchr/testify/require"
 )
 
 type SafetimeSuite struct {
 	out    *bytes.Buffer // stores log output
-	logger *logrus.Entry
+	logger *slog.Logger
 }
 
 func (s *SafetimeSuite) SetUpTest(t *testing.T) {
 	s.out = &bytes.Buffer{}
-	logger := logrus.New()
-	logger.Out = s.out
-	s.logger = logrus.NewEntry(logger)
+	s.logger = hivetest.Logger(t)
 }
 
 func TestNegativeDuration(t *testing.T) {

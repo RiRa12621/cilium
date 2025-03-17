@@ -7,6 +7,7 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/cilium/hive/hivetest"
 	"github.com/cilium/statedb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -335,8 +336,9 @@ func Test_addK8sSVCs_ClusterIP(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -470,8 +472,9 @@ func TestChangeSVCPort(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -937,8 +940,9 @@ func Test_addK8sSVCs_NodePort(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -1233,8 +1237,9 @@ func Test_addK8sSVCs_GH9576_1(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -1522,8 +1527,9 @@ func Test_addK8sSVCs_GH9576_2(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -2445,8 +2451,9 @@ func Test_addK8sSVCs_ExternalIPs(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -2576,8 +2583,9 @@ func TestHeadless(t *testing.T) {
 	}
 
 	db, nodeAddrs := newDB(t)
-	k8sSvcCache := k8s.NewServiceCache(db, nodeAddrs, k8s.NewSVCMetricsNoop())
+	k8sSvcCache := k8s.NewServiceCache(hivetest.Logger(t), db, nodeAddrs, k8s.NewSVCMetricsNoop())
 	svcWatcher := &K8sServiceWatcher{
+		logger:      hivetest.Logger(t),
 		k8sSvcCache: k8sSvcCache,
 		svcManager:  svcManager,
 	}
@@ -2664,7 +2672,7 @@ func TestK8sServiceWatcher_checkServiceNodeExposure(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			k := &K8sServiceWatcher{localNodeStore: node.NewTestLocalNodeStore(node.LocalNode{Node: types.Node{Labels: tt.nodeLabels}})}
+			k := &K8sServiceWatcher{logger: hivetest.Logger(t), localNodeStore: node.NewTestLocalNodeStore(node.LocalNode{Node: types.Node{Labels: tt.nodeLabels}})}
 			exposedOnLocalNode, err := k.checkServiceNodeExposure(&k8s.Service{Annotations: tt.svcAnnotations})
 			assert.NoError(t, err)
 			assert.Equal(t, tt.wantExposed, exposedOnLocalNode)
